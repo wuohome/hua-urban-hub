@@ -1412,11 +1412,12 @@ tr.hidden{display:none}
 
       <div class="hero-slides-track">
 
-        <!-- 第 1 張：YouTube 影片（乾淨 embed，無 enablejsapi，避免錯誤153） -->
+        <!-- 第 1 張：YouTube 影片（enablejsapi+origin 避免錯誤153，Player API 監聽播放狀態） -->
         <div class="hero-slide active">
           <div class="hero-slide-video">
             <iframe
-              src="https://www.youtube.com/embed/h_OW0u4A59k?rel=0"
+              id="ytHeroPlayer"
+              src="https://www.youtube.com/embed/h_OW0u4A59k?rel=0&enablejsapi=1&origin=https://wuohome.github.io"
               title="華都更 - 要讓都更真正動起來"
               frameborder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -2170,11 +2171,16 @@ document.addEventListener('DOMContentLoaded', function() {
 // Hero Carousel（CAROUSEL_XQ47W9LB）
 // 三張輪播：影片 / 董顧 / 九長
 // 影片 slide（index 0）停留 8 秒，其餘 4.5 秒
+// 播放中暫停輪播（VIDPAUSE_YT_API）：
+//   YouTube IFrame Player API 監聽 onStateChange
+//   PLAYING → clearInterval + videoPlaying=true
+//   PAUSED/ENDED → videoPlaying=false + 重啟計時器
 // ─────────────────────────────────────────────
 (function(){
   var slides = document.querySelectorAll('#heroCarousel .hero-slide');
   var dots   = document.querySelectorAll('#heroCarousel .carousel-dot');
   var cur = 0, total = slides.length, timer = null;
+  var videoPlaying = false; // 旗標：影片是否正在播放
 
   // 若 data-img 有值，設 background-image
   slides.forEach(function(s){
@@ -2183,6 +2189,8 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   function go(n){
+    // 雙保險：影片播放中不強制推進
+    if(videoPlaying){ return; }
     slides[cur].classList.remove('active');
     dots[cur].classList.remove('active');
     cur = (n + total) % total;
@@ -2193,6 +2201,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   function resetTimer(){
     clearInterval(timer);
+    if(videoPlaying){ return; } // 播放中不啟動計時器
     // 影片 slide（index 0）停留 8 秒，讓使用者有時間點播
     var delay = (cur === 0) ? 8000 : 4500;
     timer = setInterval(function(){ go(cur + 1); }, delay);
@@ -2202,6 +2211,34 @@ document.addEventListener('DOMContentLoaded', function() {
   window.heroCarouselGo   = function(n){ go(n); };
 
   resetTimer();
+
+  // ── YouTube IFrame Player API 整合 ──
+  // 非同步載入 API script，callback 會呼叫全域 onYouTubeIframeAPIReady
+  var ytScript = document.createElement('script');
+  ytScript.src = 'https://www.youtube.com/iframe_api';
+  document.head.appendChild(ytScript);
+
+  var ytPlayer = null;
+  window.onYouTubeIframeAPIReady = function(){
+    ytPlayer = new YT.Player('ytHeroPlayer', {
+      events: {
+        onStateChange: function(e){
+          if(e.data === YT.PlayerState.PLAYING){
+            // 影片開始播放：設旗標 + 停自動輪播
+            videoPlaying = true;
+            clearInterval(timer);
+          } else if(
+            e.data === YT.PlayerState.PAUSED ||
+            e.data === YT.PlayerState.ENDED
+          ){
+            // 影片暫停/播完：清旗標 + 重啟自動輪播
+            videoPlaying = false;
+            resetTimer();
+          }
+        }
+      }
+    });
+  };
 })();
 
 // ─────────────────────────────────────────────
