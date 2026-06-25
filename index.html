@@ -607,14 +607,14 @@ tr.hidden{display:none}
   object-fit:cover;
   object-position:center 22%;
 }
-/* 左右分隔邊條：BNI 紅→金漸層直線 + 細微內陰影，乾淨利落取代羽化 */
+/* 左右分隔邊條：純金邊條，乾淨利落取代羽化 */
 .dc-photo::before{
   content:'';
   position:absolute;
   left:0;top:0;bottom:0;
   width:4px;
   z-index:2;
-  background:linear-gradient(to bottom, var(--red) 0%, var(--red) 45%, #D4AF5A 55%, #D4AF5A 100%);
+  background:#D4AF5A;
 }
 /* 邊條右側一道極淡陰影，讓照片與文字區有層次但不糊照片 */
 .dc-photo::after{
@@ -651,7 +651,7 @@ tr.hidden{display:none}
   .dc-photo{order:-1}
   .dc-photo img{object-position:center 15%}
   /* 手機：邊條改成底部橫向紅→金線（照片在上、文字在下） */
-  .dc-photo::before{left:0;right:0;top:auto;bottom:0;width:auto;height:4px;background:linear-gradient(to right, var(--red) 0%, var(--red) 45%, #D4AF5A 55%, #D4AF5A 100%)}
+  .dc-photo::before{left:0;right:0;top:auto;bottom:0;width:auto;height:4px;background:#D4AF5A}
   .dc-photo::after{display:none}
   .dc-info{padding:18px 20px 22px}
   .dc-brandrow .dc-bni{font-size:21px}
