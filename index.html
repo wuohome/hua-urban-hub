@@ -468,6 +468,59 @@ tr.hidden{display:none}
   .cal-date-m{font-size:15px}
   .zoom-btn{width:100%;justify-content:center}
 }
+
+/* ── CAROUSEL（CAROUSEL_XQ47W9LB）── */
+/* photo-wrap 已有 position:relative; overflow:hidden */
+.hero-slides-track{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;
+}
+.hero-slide{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;
+  background:var(--gray-50);
+  opacity:0;
+  transition:opacity .6s ease;
+  pointer-events:none;
+  background-size:cover;background-position:center;background-repeat:no-repeat;
+}
+.hero-slide.active{opacity:1;pointer-events:auto}
+/* 當有真照片時，佔位內容自動隱藏 */
+.hero-slide[data-img]:not([data-img=""]) .photo-icon,
+.hero-slide[data-img]:not([data-img=""]) .photo-text,
+.hero-slide[data-img]:not([data-img=""]) .size-badge{display:none}
+/* 箭頭按鈕 */
+.carousel-btn{
+  position:absolute;top:50%;transform:translateY(-50%);
+  width:40px;height:40px;border-radius:50%;
+  background:rgba(255,255,255,.85);border:none;
+  font-size:22px;line-height:1;color:var(--gray-800);
+  cursor:pointer;z-index:10;
+  transition:background .15s,transform .15s;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:var(--shadow-md);
+  -webkit-tap-highlight-color:transparent;
+}
+.carousel-btn:hover{background:#fff;transform:translateY(-50%) scale(1.08)}
+.carousel-prev{left:14px}
+.carousel-next{right:14px}
+/* 底部圓點 */
+.carousel-dots{
+  position:absolute;bottom:14px;left:50%;transform:translateX(-50%);
+  display:flex;gap:8px;z-index:10;
+}
+.carousel-dot{
+  width:8px;height:8px;border-radius:50%;
+  background:rgba(255,255,255,.5);border:none;padding:0;cursor:pointer;
+  transition:background .2s,transform .2s;
+  -webkit-tap-highlight-color:transparent;
+}
+.carousel-dot.active{background:#fff;transform:scale(1.25)}
+@media(max-width:375px){
+  .carousel-btn{width:32px;height:32px;font-size:18px}
+  .carousel-prev{left:8px}
+  .carousel-next{right:8px}
+}
 </style>
 </head>
 <body>
@@ -520,20 +573,67 @@ tr.hidden{display:none}
       <div class="hero-sub">Hua Urban+</div>
       <div class="hero-slogan">都市更新 · 產業整合 · 夥伴共榮</div>
     </div>
-    <div class="photo-wrap">
-      <div class="photo-banner">第一屆九長合照（請置入照片）</div>
-      <div class="photo-icon">
-        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21,15 16,10 5,21"/></svg>
+    <!-- CAROUSEL_XQ47W9LB — 兩張照片輪播，2026-06-25 -->
+    <div class="photo-wrap" id="heroCarousel">
+
+      <!-- ════════════════════════════════════════
+           輪播軌道（兩張 slide）
+           放照片方式：
+           1. 把照片（例如 邱愛莉.jpg）放進 assets/ 資料夾
+           2. 找到對應 <div class="hero-slide"> 把 data-img="" 填入路徑
+              例如：data-img="assets/邱愛莉.jpg"
+           工程師會用 JS 讀 data-img 設 background-image，
+           或直接把整個 <div class="hero-slide"> 換成 <img>
+           ════════════════════════════════════════ -->
+      <div class="hero-slides-track">
+
+        <!-- 第 1 張：董事顧問 邱愛莉 -->
+        <!-- 放照片：把 data-img="" 改成 data-img="assets/邱愛莉.jpg" -->
+        <div class="hero-slide active" data-img="">
+          <div class="photo-banner">董事顧問 邱愛莉（請置入照片）</div>
+          <div class="photo-icon">
+            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21,15 16,10 5,21"/></svg>
+          </div>
+          <div class="photo-text">
+            <h3>董事顧問 邱愛莉</h3>
+            <p>請置入照片</p>
+          </div>
+          <div class="size-badge">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+            建議尺寸 1600 × 900 px（16:9）
+          </div>
+        </div>
+
+        <!-- 第 2 張：第一屆九長領導團隊 -->
+        <!-- 放照片：把 data-img="" 改成 data-img="assets/九長合照.jpg" -->
+        <div class="hero-slide" data-img="">
+          <div class="photo-banner">第一屆九長領導團隊（請置入照片）</div>
+          <div class="photo-icon">
+            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21,15 16,10 5,21"/></svg>
+          </div>
+          <div class="photo-text">
+            <h3>第一屆九長領導團隊</h3>
+            <p>請置入照片</p>
+          </div>
+          <div class="size-badge">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+            建議尺寸 1600 × 900 px（16:9）
+          </div>
+        </div>
+
+      </div><!-- /hero-slides-track -->
+
+      <!-- 左右箭頭 -->
+      <button class="carousel-btn carousel-prev" aria-label="上一張" onclick="heroCarouselMove(-1)">&#8249;</button>
+      <button class="carousel-btn carousel-next" aria-label="下一張" onclick="heroCarouselMove(1)">&#8250;</button>
+
+      <!-- 底部圓點 -->
+      <div class="carousel-dots">
+        <button class="carousel-dot active" aria-label="第 1 張" onclick="heroCarouselGo(0)"></button>
+        <button class="carousel-dot" aria-label="第 2 張" onclick="heroCarouselGo(1)"></button>
       </div>
-      <div class="photo-text">
-        <h3>第一屆九長合照</h3>
-        <p>請置入照片</p>
-      </div>
-      <div class="size-badge">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
-        建議尺寸 1600 × 900 px（16:9）
-      </div>
-    </div>
+
+    </div><!-- /photo-wrap -->
   </div>
 </section>
 
@@ -1121,6 +1221,40 @@ document.addEventListener('DOMContentLoaded', function() {
     renderCalGrid();
   });
 });
+
+// ─────────────────────────────────────────────
+// Hero Carousel（CAROUSEL_XQ47W9LB）
+// ─────────────────────────────────────────────
+(function(){
+  var slides=document.querySelectorAll('.hero-slide');
+  var dots=document.querySelectorAll('.carousel-dot');
+  var cur=0, total=slides.length, timer=null;
+
+  // 若 data-img 有值，設 background-image
+  slides.forEach(function(s){
+    var img=s.getAttribute('data-img');
+    if(img){s.style.backgroundImage='url("'+img+'")';}
+  });
+
+  function go(n){
+    slides[cur].classList.remove('active');
+    dots[cur].classList.remove('active');
+    cur=(n+total)%total;
+    slides[cur].classList.add('active');
+    dots[cur].classList.add('active');
+    resetTimer();
+  }
+
+  function resetTimer(){
+    clearInterval(timer);
+    timer=setInterval(function(){go(cur+1);},4500);
+  }
+
+  window.heroCarouselMove=function(dir){go(cur+dir);};
+  window.heroCarouselGo=function(n){go(n);};
+
+  resetTimer();
+})();
 
 // ─────────────────────────────────────────────
 // Mobile nav
