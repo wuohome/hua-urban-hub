@@ -594,7 +594,7 @@ tr.hidden{display:none}
   color:rgba(255,255,255,.72);
 }
 .dc-motto b{color:var(--red);font-weight:700;letter-spacing:.04em}
-/* 右：人像 */
+/* 右：人像（照片完整顯示，不羽化淡化） */
 .dc-photo{
   position:relative;
   background:#1a1d22;
@@ -607,12 +607,24 @@ tr.hidden{display:none}
   object-fit:cover;
   object-position:center 22%;
 }
-/* 左→右黑色羽化，讓照片融進深底 */
+/* 左右分隔邊條：BNI 紅→金漸層直線 + 細微內陰影，乾淨利落取代羽化 */
 .dc-photo::before{
   content:'';
-  position:absolute;inset:0;
+  position:absolute;
+  left:0;top:0;bottom:0;
+  width:4px;
+  z-index:2;
+  background:linear-gradient(to bottom, var(--red) 0%, var(--red) 45%, #D4AF5A 55%, #D4AF5A 100%);
+}
+/* 邊條右側一道極淡陰影，讓照片與文字區有層次但不糊照片 */
+.dc-photo::after{
+  content:'';
+  position:absolute;
+  left:4px;top:0;bottom:0;
+  width:24px;
   z-index:1;
-  background:linear-gradient(to right, #111418 0%, rgba(17,20,24,0) 22%);
+  background:linear-gradient(to right, rgba(0,0,0,.28), rgba(0,0,0,0));
+  pointer-events:none;
 }
 .dc-photo .dc-photo-name{
   position:absolute;
@@ -638,7 +650,9 @@ tr.hidden{display:none}
   .dc-card{grid-template-columns:1fr;grid-template-rows:190px 1fr}
   .dc-photo{order:-1}
   .dc-photo img{object-position:center 15%}
-  .dc-photo::before{background:linear-gradient(to top, #111418 0%, rgba(17,20,24,0) 38%)}
+  /* 手機：邊條改成底部橫向紅→金線（照片在上、文字在下） */
+  .dc-photo::before{left:0;right:0;top:auto;bottom:0;width:auto;height:4px;background:linear-gradient(to right, var(--red) 0%, var(--red) 45%, #D4AF5A 55%, #D4AF5A 100%)}
+  .dc-photo::after{display:none}
   .dc-info{padding:18px 20px 22px}
   .dc-brandrow .dc-bni{font-size:21px}
   .dc-name{font-size:19px}
