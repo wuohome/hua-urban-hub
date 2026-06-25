@@ -2221,14 +2221,21 @@ function acRender(list){
   }).join('');
 }
 // 活動詳情改讀「行事曆」分頁，過濾類型=活動（單一資料源，與月曆同步，不再讀獨立「活動」分頁）
+// 只顯示「本月 + 下月」的活動（前端自動算，過期/太遠的自動不顯示，後台不用加欄/不用觸發器）
 // 行事曆欄位（日期/類型/名稱/連結/備註）→ acRender 要的欄位（活動名稱/日期時間/…）
 function acMapFromCalendar(rows){
+  var now = new Date();
+  var curY = now.getFullYear(), curM = now.getMonth();
+  // 本月 1 號 00:00 ~ 下月底 23:59（含本月與下月，共 2 個月窗口）
+  var winStart = new Date(curY, curM, 1, 0, 0, 0);
+  var winEnd   = new Date(curY, curM + 2, 0, 23, 59, 59); // curM+2 的第 0 天 = 下月最後一天
   return (rows||[]).filter(function(r){
-    return /活動|聚會|例會|來賓/.test(r['類型']||'') || /聚會|例會|來賓日|活動/.test(r['名稱']||'');
+    var isAct = /活動|聚會|例會|來賓/.test(r['類型']||'') || /聚會|例會|來賓日|活動/.test(r['名稱']||'');
+    if(!isAct) return false;
+    var d = r['日期'] ? new Date(String(r['日期']).substring(0,10)+'T00:00:00') : null;
+    if(!d || isNaN(d)) return false;
+    return d >= winStart && d <= winEnd;   // 只留本月+下月
   }).map(function(r){
-    var today=new Date(); today.setHours(0,0,0,0);
-    var d=r['日期']?new Date(String(r['日期']).substring(0,10)):null;
-    var done = d && !isNaN(d) && d < today;
     return {
       '活動名稱': r['名稱']||'',
       '日期時間': r['日期']||'',
@@ -2236,7 +2243,7 @@ function acMapFromCalendar(rows){
       '費用': '',
       '報名連結': r['連結']||'',
       '報名截止': '',
-      '狀態': done ? '已結束' : '即將舉行',
+      '狀態': '即將舉行',
       '備註': r['備註']||''
     };
   });
