@@ -2480,7 +2480,7 @@ function tfCardHTML(x){
   var _typeKey = tfTag(x.title);
   var _typeDisp = tfTagLabel(_typeKey); // FIX4: 顯示中文 label
   var creditBadge = (x.credit || x['學分']) ?
-    '<span class="tf-credit">' + _typeDisp + ' · ' + (x.credit||x['學分']) + ' 學分</span>' : '';
+    '<span class="tf-credit">' + (x.credit||x['學分']) + ' 學分</span>' : '';
   return '<a class="tf-card" href="'+(x.link||'#')+(x.link?'?openExternalBrowser=1':'')+'" target="_blank" rel="noopener">'
     + dateBlock
     + '<div class="tf-body"><div class="tf-title">'+x.title+'</div>'
