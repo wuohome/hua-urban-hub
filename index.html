@@ -990,6 +990,24 @@ tr.hidden{display:none}
   white-space:nowrap;
 }
 .tf-alllink:hover{text-decoration:underline}
+.tf-autonote{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  font-size:12.5px;
+  color:var(--gray-400);
+  background:var(--gray-50);
+  border:1px solid var(--gray-100);
+  border-radius:100px;
+  padding:5px 14px;
+  margin-bottom:18px;
+}
+.tf-autonote::before{
+  content:"↻";
+  font-size:13px;
+  color:var(--red);
+  font-weight:700;
+}
 
 /* 線上/線下 分頁標籤 */
 .tf-tabs{
@@ -1860,6 +1878,7 @@ tr.hidden{display:none}
       MSP、簡報技巧（PSW）、引薦工作坊、LTnA 等培訓由 <strong>BNI 地區辦公室統一排課</strong>、跨分會共同上課。點任一場可前往官方頁面看詳情與報名。
       <a href="https://bntw.niiice-design.com/news-category/training/?openExternalBrowser=1" target="_blank" rel="noopener" class="tf-alllink">看全部培訓 →</a>
     </div>
+    <div class="tf-autonote">系統每日自動同步 BNI 官方培訓頁，無需手動維護</div>
 
     <!-- 線上 / 線下 分頁標籤（第 5 項：形式篩選） -->
     <div class="tf-tabs" role="tablist">
