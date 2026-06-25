@@ -1623,7 +1623,7 @@ tr.hidden{display:none}
         <div class="chain-name">A 地主改建整合鏈</div>
         <div class="chain-meta">
           <div><strong>召集人：</strong>柳慧燕</div>
-          <div><strong>下次組聚：</strong>（時間待定）</div>
+          <div><strong>下次組聚：</strong><span class="chain-next" data-chain="A">（時間待定）</span></div>
           <div><strong>地點：</strong>Zoom</div>
         </div>
       </div>
@@ -1633,7 +1633,7 @@ tr.hidden{display:none}
         <div class="chain-name">B 老屋現金流升級鏈</div>
         <div class="chain-meta">
           <div><strong>召集人：</strong>陳靖薇</div>
-          <div><strong>下次組聚：</strong>（時間待定）</div>
+          <div><strong>下次組聚：</strong><span class="chain-next" data-chain="B">（時間待定）</span></div>
           <div><strong>地點：</strong>Zoom</div>
         </div>
       </div>
@@ -1643,7 +1643,7 @@ tr.hidden{display:none}
         <div class="chain-name">C 高齡安居 × 資產傳承產業鏈</div>
         <div class="chain-meta">
           <div><strong>召集人：</strong>王春雄 Jayson</div>
-          <div><strong>下次組聚：</strong>（時間待定）</div>
+          <div><strong>下次組聚：</strong><span class="chain-next" data-chain="C">（時間待定）</span></div>
           <div><strong>地點：</strong>Zoom</div>
         </div>
       </div>
@@ -1653,7 +1653,7 @@ tr.hidden{display:none}
         <div class="chain-name">D 商用不動產升級鏈</div>
         <div class="chain-meta">
           <div><strong>召集人：</strong>陳向柔 Naomi</div>
-          <div><strong>下次組聚：</strong>（時間待定）</div>
+          <div><strong>下次組聚：</strong><span class="chain-next" data-chain="D">（時間待定）</span></div>
           <div><strong>地點：</strong>Zoom</div>
         </div>
       </div>
@@ -1663,9 +1663,8 @@ tr.hidden{display:none}
         <div class="chain-name">E 房產客戶成長鏈</div>
         <div class="chain-meta">
           <div><strong>召集人：</strong>張瓊安</div>
-          <div><strong>下次組聚：</strong>（時間待定）</div>
+          <div><strong>下次組聚：</strong><span class="chain-next" data-chain="E">（時間待定）</span></div>
           <div><strong>地點：</strong>Zoom</div>
-          <div style="margin-top:6px;font-size:11px;color:rgba(255,255,255,.35)">首次組聚籌備中</div>
         </div>
       </div>
     </div>
@@ -2259,6 +2258,54 @@ function acMapFromCalendar(rows){
       acRender(acts.length ? acts : activitiesFallback);
     })
     .catch(function(){ acRender(activitiesFallback); });
+})();
+
+// ─────────────────────────────────────────────
+// Power Team 組聚下次時間（GROUP_NEXT_3J）— 讀「組聚」分頁的「首次日期」，
+// 依「頻率」（雙週/每週/每月）自動算「從今天起的下一次」，前端永遠顯示最新、組長不用改。
+// ─────────────────────────────────────────────
+function gnNextDate(firstStr, freq){
+  if(!firstStr) return null;
+  var first = new Date(String(firstStr).substring(0,10)+'T00:00:00');
+  if(isNaN(first)) return null;
+  var today = new Date(); today.setHours(0,0,0,0);
+  var stepDays = 14; // 預設雙週
+  if(/每週|每周|weekly/i.test(freq||'')) stepDays = 7;
+  else if(/每月|monthly/i.test(freq||'')) stepDays = 0; // 每月用月份遞增
+  var d = new Date(first);
+  if(stepDays===0){ // 每月：同日往後推月
+    while(d < today){ d.setMonth(d.getMonth()+1); }
+  }else{
+    while(d < today){ d.setDate(d.getDate()+stepDays); }
+  }
+  return d;
+}
+function gnFmt(d){
+  if(!d) return null;
+  var wd=['日','一','二','三','四','五','六'];
+  return (d.getMonth()+1)+'/'+d.getDate()+'（'+wd[d.getDay()]+'）';
+}
+(function loadGroupMeetings(){
+  var url = GAS_CAL_URL + '?sheet=' + encodeURIComponent('組聚') + '&t=' + Date.now();
+  fetch(url)
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      var rows = Array.isArray(data) ? data : (data.data || data.rows || []);
+      rows.forEach(function(r){
+        // 從「產業鏈」抓開頭字母 A-E 當 key
+        var m = String(r['產業鏈']||'').match(/^([A-E])/);
+        if(!m) return;
+        var key = m[1];
+        var span = document.querySelector('.chain-next[data-chain="'+key+'"]');
+        if(!span) return;
+        var nxt = gnNextDate(r['首次日期']||r['首次組聚']||r['下次組聚時間'], r['頻率']);
+        if(nxt){
+          span.textContent = gnFmt(nxt) + ' Zoom';
+          span.style.color = 'rgba(255,255,255,.85)';
+        }
+      });
+    })
+    .catch(function(){ /* 失敗保留「時間待定」 */ });
 })();
 
 // ─────────────────────────────────────────────
