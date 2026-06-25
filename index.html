@@ -2555,7 +2555,7 @@ function acRender(list){
     }
     // 第 4b 項：日期塊格式「日期數字大字 + 中文年月」
     // FIX2: 日期紅塊只留「大數字日期 + 月份 + 年」，移除「星期X」那行
-    var side = dt&&!isNaN(dt) ? '<div class="feat-side"><div><div class="date-big">'+dt.getDate()+'</div><div class="date-month">'+mN[dt.getMonth()]+'</div><div class="date-month" style="font-size:11px;opacity:.7;margin-top:2px">'+dt.getFullYear()+'</div></div></div>' : '';
+    var side = dt&&!isNaN(dt) ? '<div class="feat-side"><div><div class="date-month">'+mN[dt.getMonth()]+'</div><div class="date-big">'+dt.getDate()+'</div><div class="date-month" style="font-size:11px;opacity:.7;margin-top:2px">'+dt.getFullYear()+'</div></div></div>' : '';
     var typeLabel = x['類型'] || '分會活動';
     return '<div class="feat-event" style="margin-bottom:16px"><div class="feat-body">'
       +'<div class="badge badge-red">'+acEsc(typeLabel)+'</div>'
