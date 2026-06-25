@@ -19,8 +19,8 @@
   --red:#CF2030;--red-dark:#A8192A;--red-light:#E8404F;
   --gold:#B8963E;
   --white:#FFFFFF;--off-white:#F8F9FA;
-  --gray-50:#F2F3F5;--gray-100:#E4E6EA;--gray-200:#C8CDD6;
-  --gray-400:#8E96A3;--gray-600:#5A6472;--gray-800:#2D3440;--gray-900:#1A1F29;
+  --gray-50:#F2F3F5;--gray-100:#E4E6EA;--gray-200:#C8CDD6;--gray-300:#AEB4BF;
+  --gray-400:#8E96A3;--gray-500:#717985;--gray-600:#5A6472;--gray-800:#2D3440;--gray-900:#1A1F29;
   --nav-h:64px;
   --shadow-sm:0 1px 3px rgba(26,31,41,.08);
   --shadow-md:0 4px 12px rgba(26,31,41,.10),0 2px 4px rgba(26,31,41,.06);
@@ -85,7 +85,7 @@ a{text-decoration:none;color:inherit}
 .stat-lbl{font-size:12px;opacity:.85;letter-spacing:.05em;color:#fff}
 
 /* ── CALENDAR SECTION ── */
-.calendar-sec{background:var(--white);padding:64px 0 56px;border-bottom:2px solid var(--gray-100)}
+.calendar-sec{background:var(--white);padding:64px 0;border-bottom:2px solid var(--gray-100)}
 .sec-head{margin-bottom:40px}
 .sec-head h2{font-family:"Noto Serif TC",serif;font-size:clamp(20px,3vw,26px);font-weight:700;color:var(--gray-900);line-height:1.2;letter-spacing:-.01em;margin-bottom:6px}
 .sec-head p{font-size:14px;color:var(--gray-400)}
@@ -250,7 +250,7 @@ a{text-decoration:none;color:inherit}
 .av-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
 
 /* ── ACTIVITIES ── */
-.activities{background:var(--off-white);padding:48px 0}
+.activities{background:var(--off-white);padding:64px 0}
 .feat-event{background:var(--white);border-radius:var(--r-lg);box-shadow:var(--shadow-md);overflow:hidden;display:grid;grid-template-columns:1fr auto;margin-bottom:24px;border:1px solid var(--gray-100)}
 .feat-body{padding:28px}
 .badge{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;border-radius:4px;padding:4px 10px;margin-bottom:14px}
@@ -282,7 +282,6 @@ a{text-decoration:none;color:inherit}
 .hist-tag{flex-shrink:0;font-size:11px;font-weight:600;padding:3px 10px;border-radius:100px;background:var(--gray-50);color:var(--gray-600);border:1px solid var(--gray-100)}
 
 /* activities 弱化標籤 */
-.activities .sec-head h2{font-size:clamp(17px,2.5vw,22px)}
 
 /* ── MSP ── */
 .msp{background:var(--white);padding:64px 0}
@@ -366,10 +365,9 @@ a{text-decoration:none;color:inherit}
 .zoom-btn svg{width:20px;height:20px;fill:none;stroke:var(--red);stroke-width:2;flex-shrink:0}
 .deadline-badge{
   display:inline-flex;align-items:center;gap:6px;
-  background:#FACC15;color:#713F12;
+  background:rgba(212,175,90,.18);color:#E4C77A;border:1px solid rgba(212,175,90,.4);
   font-size:12px;font-weight:700;padding:6px 14px;
   border-radius:100px;margin-bottom:16px;letter-spacing:.03em;
-  box-shadow:0 2px 8px rgba(250,204,21,.35)
 }
 .slides-btn{
   display:inline-flex;align-items:center;gap:8px;
@@ -1791,14 +1789,13 @@ tr.hidden{display:none}
       <div>
         <div class="f-col-title">聯絡資訊</div>
         <ul class="f-links">
-          <li><a href="#">BNI Taiwan 官網</a></li>
-          <li><a href="#">新訪客報名入口</a></li>
+          <li><a href="https://bni.tw?openExternalBrowser=1" target="_blank" rel="noopener">BNI Taiwan 官網</a></li>
+          <li><a href="https://www.bniconnectglobal.com?openExternalBrowser=1" target="_blank" rel="noopener">BNI Connect 登入</a></li>
         </ul>
       </div>
     </div>
     <div class="f-bottom">
       <div class="f-copy">&copy; 2026 BNI 華都更分會 · Hua Urban+ Chapter · 夥伴資訊入口</div>
-      <div class="f-legal"><a href="#">隱私說明</a><a href="#">使用條款</a></div>
     </div>
   </div>
 </footer>
