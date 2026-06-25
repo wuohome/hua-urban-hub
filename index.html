@@ -2523,13 +2523,14 @@ function acRender(list){
     var done=/已結束|結束/.test(x['狀態']||'');
     var statusHTML = x['狀態'] ? '<span class="status '+(done?'s-done':'s-open')+'" style="'+(done?'background:rgba(90,100,114,.07);color:#5A6472':'background:rgba(207,32,48,.08);color:var(--red)')+'">'+acEsc(x['狀態'])+'</span>' : '';
     var meta='';
-    // 第 4a 項：時間顯示邏輯 — 優先從日期時間欄解析；沒有時間則顯示淡字「時間待補」提示
-    // 第 4b 項：日期塊改中文月份格式（mN 已改為中文）
-    // 用原字串判斷有沒有帶時間（避免 new Date('2026-07-09') 被當 UTC 午夜→台北 08:00 的假時間）
-    var hasTime = /\d{1,2}:\d{2}/.test(String(x['日期時間']||''));
-    // 也嘗試從備註解析時間（後台「備註」欄自由文字）
-    var tmFromNote = (String(x['備註']||'').match(/(\d{1,2}:\d{2})/)||[])[1] || '';
-    var tm = hasTime ? (String(x['日期時間']).match(/(\d{1,2}:\d{2})/)||[])[1] : tmFromNote;
+    // 時間顯示邏輯：
+    // 優先讀 acMapFromCalendar 組好的「時間顯示」欄（含開始–結束區間或「XX 起」）
+    // fallback：從日期時間欄用 regex 抓 HH:mm（相容舊資料格式）
+    // 都沒有：顯示淡字「時間待補」
+    var tm = x['時間顯示'] || (function(){
+      var hasTime = /\d{1,2}:\d{2}/.test(String(x['日期時間']||''));
+      return hasTime ? (String(x['日期時間']).match(/(\d{1,2}:\d{2})/)||[])[1] : '';
+    }());
     if(x['日期時間']){
       var dstr = dt&&!isNaN(dt) ? (dt.getFullYear()+' 年 '+String(dt.getMonth()+1).padStart(2,'0')+' 月 '+String(dt.getDate()).padStart(2,'0')+' 日'+(isNaN(dt.getDay())?'':'（'+wd[dt.getDay()]+'）')) : acEsc(x['日期時間']);
       meta+='<div class="meta-item"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>'+dstr+'</div>';
@@ -2569,6 +2570,10 @@ function acRender(list){
 // 活動詳情改讀「行事曆」分頁，過濾類型=活動（單一資料源，與月曆同步，不再讀獨立「活動」分頁）
 // 只顯示「本月 + 下月」的活動（前端自動算，過期/太遠的自動不顯示，後台不用加欄/不用觸發器）
 // 行事曆欄位（日期/類型/名稱/連結/備註）→ acRender 要的欄位（活動名稱/日期時間/…）
+// Helper: 從欄位值用 regex 抓 HH:mm，容錯兩種格式：
+//   純時間 "14:00"、舊格式 "1899-12-30 14:00"、日期時間 "2026-07-03 14:00"
+function extractTime(v){ var m = String(v||'').match(/(\d{1,2}:\d{2})/); return m ? m[1] : ''; }
+
 function acMapFromCalendar(rows){
   var now = new Date();
   var curY = now.getFullYear(), curM = now.getMonth();
@@ -2576,36 +2581,35 @@ function acMapFromCalendar(rows){
   var winStart = new Date(curY, curM, 1, 0, 0, 0);
   var winEnd   = new Date(curY, curM + 2, 0, 23, 59, 59); // curM+2 的第 0 天 = 下月最後一天
   return (rows||[]).filter(function(r){
-    var isAct = /活動|聚會|例會|來賓/.test(r['類型']||'') || /聚會|例會|來賓日|活動/.test(r['名稱']||'');
+    // 過濾條件：類型含活動/聚會/例會/來賓，或活動標題含這些詞（相容新舊欄名）
+    var title = r['活動標題'] || r['名稱'] || '';
+    var isAct = /活動|聚會|例會|來賓/.test(r['類型']||'') || /聚會|例會|來賓日|活動/.test(title);
     if(!isAct) return false;
     var d = r['日期'] ? new Date(String(r['日期']).substring(0,10)+'T00:00:00') : null;
     if(!d || isNaN(d)) return false;
     return d >= winStart && d <= winEnd;   // 只留本月+下月
   }).map(function(r){
-    // 副標：優先讀後台「副標」欄；沒有則從「備註」抓第一句有意義的文字（不倒整段）
-    var sub = r['副標'] || r['副标'] || '';
-    if(!sub && r['備註']){
-      // 從備註抓第一段非裝飾、非「日期/時間/地點」開頭、長度適中的句子
-      var lines = String(r['備註']).split(/\n+/).map(function(s){return s.trim();}).filter(Boolean);
-      for(var i=0;i<lines.length;i++){
-        var ln = lines[i].replace(/^[🎉🚢📅📍🎊✨\s]+/,'').trim();
-        // 跳過：純符號、日期時間地點報名等欄位式資訊、太短的標題重複
-        if(ln.length < 8) continue;
-        if(/^(活動日期|活動時間|日期|時間|地點|報名|限量|📅|📍|報名截止)/.test(ln)) continue;
-        if(ln === (r['名稱']||'')) continue;
-        sub = ln.length > 42 ? ln.substring(0,40)+'…' : ln;
-        break;
-      }
-    }
+    // 活動標題：讀新欄名，fallback 舊欄名
+    var title = r['活動標題'] || r['名稱'] || '';
+    // 副標：直接讀後台正式副標欄（後台已有專欄，不再從備註猜）
+    var sub = r['副標'] || '';
+    // 地點：讀地點欄，換行符轉空格讓卡片 meta 列整齊
+    var loc = String(r['地點']||'').replace(/\n+/g,' ').trim();
+    // 時間：從開始/結束欄用 extractTime 抓 HH:mm，容錯新舊格式
+    var start = extractTime(r['開始時間(未定可不填)']);
+    var end   = extractTime(r['結束時間(選填)']);
+    // 組合時間字串：有開始有結束→區間；有開始無結束→「XX 起」；都無→空字串
+    var timeStr = start ? (end ? start + '–' + end : start + ' 起') : '';
     return {
-      '活動名稱': r['名稱']||'',
+      '活動名稱': title,
       '活動副標': sub,
       '類型': r['類型']||'活動',
       '日期時間': r['日期']||'',
-      '地點': '',                        // 行事曆無地點欄，留空（卡片自動不顯示）
+      '地點': loc,
       '費用': '',
       '報名連結': r['連結']||'',
       '報名截止': '',
+      '時間顯示': timeStr,               // 新增：前端時間顯示字串（acRender 優先讀這個）
       '狀態': (function(){
         var today = new Date(); today.setHours(0,0,0,0);
         var actDate = r['日期'] ? new Date(String(r['日期']).substring(0,10)+'T00:00:00') : null;
@@ -2614,7 +2618,7 @@ function acMapFromCalendar(rows){
         if(actDate.getTime() === today.getTime()) return '今日舉行';
         return '即將舉行';
       }()),
-      '備註': ''                          // 不再倒整段備註進卡片
+      '備註': ''
     };
   });
 }
