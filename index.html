@@ -491,6 +491,151 @@ tr.hidden{display:none}
 .hero-slide[data-img]:not([data-img=""]) .size-badge{display:none}
 /* 完整介紹卡（16:9 設計圖）：用 contain 完整顯示不裁切，深色底襯 */
 .hero-slide.has-photo-contain{background-size:contain;background-color:#1a1a1a}
+
+/* ── 董顧介紹卡（網頁重刻，取代跑版簡報圖）DC_CARD_8H2Q ── */
+.dc-card{
+  position:absolute;inset:0;
+  display:grid;
+  grid-template-columns:1fr 0.82fr;
+  background:#111418;
+  overflow:hidden;
+}
+/* 左：黑底紅字介紹 */
+.dc-info{
+  padding:30px 30px 26px 40px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  color:#fff;
+  min-width:0;
+}
+.dc-brandrow{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:14px;
+}
+.dc-brandrow .dc-bni{
+  font-family:Arial, sans-serif;
+  font-weight:900;
+  font-size:26px;
+  letter-spacing:-.02em;
+  color:var(--red);
+  line-height:1;
+}
+.dc-brandrow .dc-role{
+  font-size:13px;
+  font-weight:700;
+  letter-spacing:.06em;
+  color:#fff;
+  border-left:2px solid var(--red);
+  padding-left:10px;
+  line-height:1.35;
+}
+.dc-brandrow .dc-role small{
+  display:block;
+  font-size:9.5px;
+  font-weight:500;
+  letter-spacing:.18em;
+  color:rgba(255,255,255,.55);
+}
+.dc-name{
+  font-size:23px;
+  font-weight:800;
+  color:#fff;
+  margin-bottom:14px;
+  line-height:1.2;
+}
+.dc-name span{
+  font-size:14px;
+  font-weight:500;
+  color:rgba(255,255,255,.6);
+  margin-left:6px;
+}
+.dc-creds{
+  list-style:none;
+  margin:0 0 14px;
+  padding:0;
+  display:flex;
+  flex-direction:column;
+  gap:5px;
+}
+.dc-creds li{
+  position:relative;
+  padding-left:15px;
+  font-size:12.5px;
+  line-height:1.5;
+  color:rgba(255,255,255,.82);
+}
+.dc-creds li::before{
+  content:'';
+  position:absolute;
+  left:0;top:8px;
+  width:5px;height:5px;
+  border-radius:50%;
+  background:var(--red);
+}
+.dc-creds li strong{color:#fff;font-weight:700}
+.dc-creds .dc-award{color:#F2C84B;font-weight:600}
+.dc-motto{
+  border-top:1px solid rgba(255,255,255,.12);
+  padding-top:12px;
+  font-size:11.5px;
+  line-height:1.7;
+  color:rgba(255,255,255,.7);
+}
+.dc-motto b{color:var(--red);font-weight:700;letter-spacing:.04em}
+/* 右：人像 */
+.dc-photo{
+  position:relative;
+  background:#1a1d22;
+  overflow:hidden;
+}
+.dc-photo img{
+  position:absolute;
+  inset:0;
+  width:100%;height:100%;
+  object-fit:cover;
+  object-position:center 22%;
+}
+/* 左→右黑色羽化，讓照片融進深底 */
+.dc-photo::before{
+  content:'';
+  position:absolute;inset:0;
+  z-index:1;
+  background:linear-gradient(to right, #111418 0%, rgba(17,20,24,0) 22%);
+}
+.dc-photo .dc-photo-name{
+  position:absolute;
+  left:0;right:0;bottom:0;
+  z-index:2;
+  background:linear-gradient(to top, rgba(0,0,0,.78), transparent);
+  color:#fff;
+  font-size:14px;
+  font-weight:700;
+  padding:24px 18px 12px;
+  text-align:right;
+}
+.dc-photo .dc-photo-name span{
+  display:block;
+  font-size:11px;
+  font-weight:500;
+  color:rgba(255,255,255,.7);
+}
+/* 手機：上圖下文直排 */
+@media(max-width:680px){
+  /* 董顧卡所在的 hero 容器：手機解除 16:9，給足固定高度容兩張 slide（董顧卡上圖下文最高） */
+  .photo-wrap{aspect-ratio:auto;min-height:540px}
+  .dc-card{grid-template-columns:1fr;grid-template-rows:190px 1fr}
+  .dc-photo{order:-1}
+  .dc-photo img{object-position:center 15%}
+  .dc-photo::before{background:linear-gradient(to top, #111418 0%, rgba(17,20,24,0) 38%)}
+  .dc-info{padding:18px 20px 22px}
+  .dc-brandrow .dc-bni{font-size:21px}
+  .dc-name{font-size:19px}
+  .dc-creds li{font-size:11.5px}
+  .dc-motto{font-size:11px;line-height:1.65}
+}
 /* 箭頭按鈕 */
 .carousel-btn{
   position:absolute;top:50%;transform:translateY(-50%);
@@ -1070,9 +1215,31 @@ tr.hidden{display:none}
            ════════════════════════════════════════ -->
       <div class="hero-slides-track">
 
-        <!-- 第 1 張：董事顧問 邱碩鈺 Ellie（已置入照片 assets/ellie.png，完整顯示用 contain）-->
-        <div class="hero-slide active has-photo-contain" data-img="assets/ellie.png">
-          <div class="photo-banner">董事顧問 邱碩鈺 Ellie Chiu</div>
+        <!-- 第 1 張：董事顧問 邱碩鈺 Ellie（網頁重刻，取代跑版簡報圖 DC_CARD_8H2Q）-->
+        <div class="hero-slide active">
+          <div class="dc-card">
+            <div class="dc-info">
+              <div class="dc-brandrow">
+                <span class="dc-bni">BNI</span>
+                <span class="dc-role">董事顧問 DC<small>DIRECTOR CONSULTANT</small></span>
+              </div>
+              <div class="dc-name">邱碩鈺<span>Ellie Chiu</span></div>
+              <ul class="dc-creds">
+                <li><strong>華地產鑽石分會</strong>｜新北市西B區會員 2025–迄今</li>
+                <li>2025 年新北市西B區 <strong>區域年度引薦金額第一名</strong></li>
+                <li>華地產 創會秘書財務 ・ 第二屆主席</li>
+                <li><strong>House123</strong> 創辦人暨執行長（2012–迄今）</li>
+                <li class="dc-award">★ 一金質獎章</li>
+              </ul>
+              <div class="dc-motto">
+                <b>核心理念</b>　篩選大於說服；事先說明，別事後解釋。付出者收穫，收穫者再付出，大付出者要有大收穫。順流創造，只要出發就能到達 ── 利他，才是真利己；人生積極主動最快樂。
+              </div>
+            </div>
+            <div class="dc-photo">
+              <img src="assets/ellie-portrait.png" alt="董事顧問 邱碩鈺 Ellie Chiu">
+              <div class="dc-photo-name">邱碩鈺 Ellie Chiu<span>BNI 華都更分會 董事顧問</span></div>
+            </div>
+          </div>
         </div>
 
         <!-- 第 2 張：第一屆九長領導團隊 -->
