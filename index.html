@@ -668,11 +668,11 @@ tr.hidden{display:none}
 
 /* ── 培訓快訊 (TRAINING_FEED_7XK2) ── */
 .tf-intro{
-  max-width:720px;
+  max-width:980px;
   font-size:14px;
   color:var(--gray-600);
   line-height:1.8;
-  margin-bottom:24px;
+  margin-bottom:18px;
 }
 .tf-alllink{
   display:inline-block;
@@ -682,13 +682,65 @@ tr.hidden{display:none}
   white-space:nowrap;
 }
 .tf-alllink:hover{text-decoration:underline}
-.tf-list{
+
+/* 線上/線下 分頁標籤 */
+.tf-tabs{
   display:flex;
-  flex-direction:column;
-  gap:10px;
-  max-width:720px;
+  gap:8px;
+  margin-bottom:18px;
+  flex-wrap:wrap;
+}
+.tf-tab{
+  font-family:inherit;
+  font-size:13.5px;
+  font-weight:600;
+  color:var(--gray-500);
+  background:var(--gray-50);
+  border:1px solid var(--gray-100);
+  border-radius:100px;
+  padding:8px 18px;
+  cursor:pointer;
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  transition:all .18s ease;
+}
+.tf-tab:hover{
+  color:var(--gray-800);
+  border-color:var(--gray-200);
+}
+.tf-tab.active{
+  color:#fff;
+  background:var(--red);
+  border-color:var(--red);
+}
+.tf-tab-count{
+  font-size:11px;
+  font-weight:700;
+  min-width:18px;
+  height:18px;
+  padding:0 5px;
+  border-radius:100px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  background:rgba(0,0,0,.06);
+  color:var(--gray-500);
+}
+.tf-tab.active .tf-tab-count{
+  background:rgba(255,255,255,.25);
+  color:#fff;
+}
+
+/* 卡片清單：兩欄網格填滿版面（取代原單欄 720px） */
+.tf-list{
+  display:grid;
+  grid-template-columns:repeat(2, 1fr);
+  gap:12px;
+  max-width:980px;
 }
 .tf-loading{
+  grid-column:1 / -1;
   font-size:14px;
   color:var(--gray-400);
   padding:18px 0;
@@ -707,7 +759,7 @@ tr.hidden{display:none}
 .tf-card:hover{
   border-color:rgba(207,32,48,.35);
   box-shadow:0 4px 16px rgba(0,0,0,.06);
-  transform:translateX(2px);
+  transform:translateY(-2px);
 }
 /* 左側日期方塊 */
 .tf-date{
@@ -740,7 +792,13 @@ tr.hidden{display:none}
   font-weight:700;
   color:var(--gray-900);
   line-height:1.4;
-  margin-bottom:3px;
+  margin-bottom:6px;
+}
+.tf-meta{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  flex-wrap:wrap;
 }
 .tf-tag{
   display:inline-block;
@@ -750,6 +808,25 @@ tr.hidden{display:none}
   background:rgba(207,32,48,.07);
   padding:2px 9px;
   border-radius:100px;
+}
+/* 上課方式徽章 */
+.tf-mode{
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+  font-size:11px;
+  font-weight:600;
+  padding:2px 9px;
+  border-radius:100px;
+}
+.tf-mode svg{flex-shrink:0}
+.tf-mode-on{
+  color:#0E7C5A;
+  background:rgba(14,124,90,.09);
+}
+.tf-mode-off{
+  color:#B26A00;
+  background:rgba(178,106,0,.10);
 }
 /* 右側箭頭 */
 .tf-go{
@@ -762,8 +839,8 @@ tr.hidden{display:none}
   display:flex;
   align-items:flex-start;
   gap:8px;
-  margin-top:20px;
-  max-width:720px;
+  margin-top:22px;
+  max-width:980px;
   font-size:13px;
   color:var(--gray-500);
   line-height:1.7;
@@ -771,6 +848,10 @@ tr.hidden{display:none}
 .tf-note svg{flex-shrink:0;margin-top:2px;color:var(--gray-400)}
 .tf-note a{color:var(--red);font-weight:600}
 .tf-note a:hover{text-decoration:underline}
+/* 平板以下改單欄 */
+@media(max-width:760px){
+  .tf-list{grid-template-columns:1fr}
+}
 @media(max-width:600px){
   .tf-date{width:46px;padding-right:10px}
   .tf-date .d{font-size:19px}
@@ -1312,8 +1393,15 @@ tr.hidden{display:none}
     </div>
 
     <div class="tf-intro">
-      MSP、簡報技巧（PSW）、引薦工作坊、LTnA 等培訓由 <strong>BNI 地區辦公室統一排課</strong>、跨分會共同上課。下方為近期場次，點任一場可前往官方頁面看詳情與報名。
+      MSP、簡報技巧（PSW）、引薦工作坊、LTnA 等培訓由 <strong>BNI 地區辦公室統一排課</strong>、跨分會共同上課。點任一場可前往官方頁面看詳情與報名。
       <a href="https://bntw.niiice-design.com/news-category/training/?openExternalBrowser=1" target="_blank" rel="noopener" class="tf-alllink">看全部培訓 →</a>
+    </div>
+
+    <!-- 線上 / 線下 分頁標籤 -->
+    <div class="tf-tabs" role="tablist">
+      <button class="tf-tab active" data-mode="all" type="button">全部 <span class="tf-tab-count">0</span></button>
+      <button class="tf-tab" data-mode="online" type="button">線上 Zoom <span class="tf-tab-count">0</span></button>
+      <button class="tf-tab" data-mode="offline" type="button">線下實體 <span class="tf-tab-count">0</span></button>
     </div>
 
     <div id="trainingList" class="tf-list">
@@ -1776,14 +1864,24 @@ if(document.readyState === 'loading'){
 // 失敗或未填則用 trainingFallback（2026-06-25 抓的真資料）。
 // ─────────────────────────────────────────────
 var TRAINING_API = ''; // ←給值範例：'https://script.google.com/macros/s/XXX/exec?sheet=培訓快訊'
+// mode：'online'=線上 Zoom / 'offline'=線下實體（爬蟲依官方內頁「培訓地址」自動判斷）
 var trainingFallback = [
-  {title:'新北市西B區成功會員培訓初階MSP', link:'https://bntw.niiice-design.com/news/msp-4/', date:'2026-06-29'},
-  {title:'跨分會組聚培訓', link:'https://bntw.niiice-design.com/news/group-training-14/', date:'2026-07-06'},
-  {title:'簡報技巧工作坊PSW培訓', link:'https://bntw.niiice-design.com/news/psw-2/', date:'2026-07-08'},
-  {title:'引薦工作坊', link:'https://bntw.niiice-design.com/news/recommend-3/', date:'2026-07-13'},
-  {title:'LTnA培訓', link:'https://bntw.niiice-design.com/news/ltna-4-2/', date:'2026-07-14'},
-  {title:'跨分會組聚培訓', link:'https://bntw.niiice-design.com/news/group-training-15/', date:'2026-07-20'}
+  {title:'新北市西B區成功會員培訓初階MSP', link:'https://bntw.niiice-design.com/news/msp-4/', date:'2026-06-29', mode:'online'},
+  {title:'跨分會組聚培訓', link:'https://bntw.niiice-design.com/news/group-training-14/', date:'2026-07-06', mode:'online'},
+  {title:'簡報技巧工作坊PSW培訓', link:'https://bntw.niiice-design.com/news/psw-2/', date:'2026-07-08', mode:'offline'},
+  {title:'引薦工作坊', link:'https://bntw.niiice-design.com/news/recommend-3/', date:'2026-07-13', mode:'online'},
+  {title:'LTnA培訓', link:'https://bntw.niiice-design.com/news/ltna-4-2/', date:'2026-07-14', mode:'online'},
+  {title:'跨分會組聚培訓', link:'https://bntw.niiice-design.com/news/group-training-15/', date:'2026-07-20', mode:'online'},
+  {title:'一對一工作坊', link:'https://bntw.niiice-design.com/news/one-to-one-3/', date:'2026-08-03', mode:'online'},
+  {title:'簡報技巧工作坊PSW培訓', link:'https://bntw.niiice-design.com/news/psw-3/', date:'2026-08-05', mode:'online'},
+  {title:'新北市西B區成功會員培訓初階MSP', link:'https://bntw.niiice-design.com/news/msp-5/', date:'2026-08-10', mode:'online'},
+  {title:'LTnA培訓', link:'https://bntw.niiice-design.com/news/ltna-5/', date:'2026-08-11', mode:'online'},
+  {title:'跨分會組聚培訓', link:'https://bntw.niiice-design.com/news/group-training-16/', date:'2026-08-12', mode:'online'},
+  {title:'PT工作坊', link:'https://bntw.niiice-design.com/news/pt-4/', date:'2026-08-17', mode:'online'}
 ];
+var trainingData = [];      // 載入後的全量資料（已濾過期、已排序）
+var trainingFilter = 'all'; // 當前 Tab：all | online | offline
+
 function tfTag(title){
   if(/MSP/i.test(title)) return 'MSP';
   if(/PSW|簡報/.test(title)) return 'PSW';
@@ -1794,40 +1892,79 @@ function tfTag(title){
   if(/PT|工作坊/.test(title)) return '工作坊';
   return '培訓';
 }
-function tfRender(list){
+// 上課方式徽章
+function tfModeBadge(mode){
+  if(mode==='offline') return '<span class="tf-mode tf-mode-off"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>線下實體</span>';
+  return '<span class="tf-mode tf-mode-on"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><rect x="2" y="4" width="15" height="14" rx="2"/><path d="M17 9l5-3v12l-5-3"/></svg>線上 Zoom</span>';
+}
+
+function tfCardHTML(x){
+  var mNames = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
+  var dt = x.date ? new Date(x.date) : null;
+  var dateBlock = (dt && !isNaN(dt))
+    ? '<div class="tf-date"><div class="m">'+mNames[dt.getMonth()]+'</div><div class="d">'+dt.getDate()+'</div><div class="y">'+dt.getFullYear()+'</div></div>'
+    : '<div class="tf-date"><div class="m">近期</div><div class="d">·</div></div>';
+  return '<a class="tf-card" href="'+(x.link||'#')+(x.link?'?openExternalBrowser=1':'')+'" target="_blank" rel="noopener">'
+    + dateBlock
+    + '<div class="tf-body"><div class="tf-title">'+x.title+'</div>'
+    + '<div class="tf-meta"><span class="tf-tag">'+tfTag(x.title)+'</span>'+tfModeBadge(x.mode)+'</div></div>'
+    + '<svg class="tf-go" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>'
+    + '</a>';
+}
+
+// 依當前 Tab 渲染卡片
+function tfPaint(){
   var box = document.getElementById('trainingList');
   if(!box) return;
-  // 過濾掉已過期（早於今天）的場次，依日期排序，取最近 6 筆
-  var today = new Date(); today.setHours(0,0,0,0);
-  var rows = (list||[]).filter(function(x){
-    if(!x.date) return true;
-    var d = new Date(x.date); return isNaN(d) ? true : d >= today;
-  }).sort(function(a,b){ return (a.date||'').localeCompare(b.date||''); }).slice(0,6);
+  var rows = trainingData.filter(function(x){
+    if(trainingFilter==='all') return true;
+    return (x.mode||'online') === trainingFilter;
+  });
   if(!rows.length){
-    box.innerHTML = '<div class="tf-loading">近期暫無培訓場次，請見<a href="https://bntw.niiice-design.com/news-category/training/?openExternalBrowser=1" target="_blank" rel="noopener" style="color:var(--red)">官方培訓頁</a>。</div>';
+    box.innerHTML = '<div class="tf-loading">此分類近期暫無場次，請切換「全部」或見<a href="https://bntw.niiice-design.com/news-category/training/?openExternalBrowser=1" target="_blank" rel="noopener" style="color:var(--red)">官方培訓頁</a>。</div>';
     return;
   }
-  var mNames = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
-  box.innerHTML = rows.map(function(x){
-    var dt = x.date ? new Date(x.date) : null;
-    var dateBlock = (dt && !isNaN(dt))
-      ? '<div class="tf-date"><div class="m">'+mNames[dt.getMonth()]+'</div><div class="d">'+dt.getDate()+'</div><div class="y">'+dt.getFullYear()+'</div></div>'
-      : '<div class="tf-date"><div class="m">近期</div><div class="d">·</div></div>';
-    return '<a class="tf-card" href="'+(x.link||'#')+(x.link?'?openExternalBrowser=1':'')+'" target="_blank" rel="noopener">'
-      + dateBlock
-      + '<div class="tf-body"><div class="tf-title">'+x.title+'</div><span class="tf-tag">'+tfTag(x.title)+'</span></div>'
-      + '<svg class="tf-go" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>'
-      + '</a>';
-  }).join('');
+  box.innerHTML = rows.map(tfCardHTML).join('');
 }
+
+// Tab 切換綁定 + 計數
+function tfBindTabs(){
+  var tabs = document.querySelectorAll('.tf-tab');
+  var nAll = trainingData.length;
+  var nOn  = trainingData.filter(function(x){ return (x.mode||'online')==='online'; }).length;
+  var nOff = trainingData.filter(function(x){ return x.mode==='offline'; }).length;
+  var counts = {all:nAll, online:nOn, offline:nOff};
+  tabs.forEach(function(t){
+    var k = t.dataset.mode;
+    var c = t.querySelector('.tf-tab-count');
+    if(c) c.textContent = counts[k];
+    t.addEventListener('click', function(){
+      trainingFilter = k;
+      tabs.forEach(function(x){ x.classList.toggle('active', x===t); });
+      tfPaint();
+    });
+  });
+}
+
+function tfInit(list){
+  // 濾過期 + 排序（全量，不在此切 6 筆，讓 Tab 各自完整）
+  var today = new Date(); today.setHours(0,0,0,0);
+  trainingData = (list||[]).filter(function(x){
+    if(!x.date) return true;
+    var d = new Date(x.date); return isNaN(d) ? true : d >= today;
+  }).sort(function(a,b){ return (a.date||'').localeCompare(b.date||''); });
+  tfBindTabs();
+  tfPaint();
+}
+
 (function loadTraining(){
   if(TRAINING_API){
     fetch(TRAINING_API + (TRAINING_API.indexOf('?')>-1?'&':'?') + 't=' + Date.now())
       .then(function(r){ return r.json(); })
-      .then(function(data){ tfRender(Array.isArray(data)?data:(data.rows||data.data||[])); })
-      .catch(function(){ tfRender(trainingFallback); });
+      .then(function(data){ tfInit(Array.isArray(data)?data:(data.rows||data.data||[])); })
+      .catch(function(){ tfInit(trainingFallback); });
   }else{
-    tfRender(trainingFallback);
+    tfInit(trainingFallback);
   }
 })();
 
