@@ -1412,8 +1412,20 @@ tr.hidden{display:none}
 
       <div class="hero-slides-track">
 
-        <!-- 第 1 張：董事顧問 邱碩鈺 Ellie（網頁重刻，取代跑版簡報圖 DC_CARD_8H2Q）-->
+        <!-- 第 1 張：YouTube 影片（乾淨 embed，無 enablejsapi，避免錯誤153） -->
         <div class="hero-slide active">
+          <div class="hero-slide-video">
+            <iframe
+              src="https://www.youtube.com/embed/h_OW0u4A59k?rel=0"
+              title="BNI 華都更分會 — 愛濃那愛，真心動起來"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowfullscreen></iframe>
+          </div>
+        </div>
+
+        <!-- 第 2 張：董事顧問 邱碩鈺 Ellie（網頁重刻，取代跑版簡報圖 DC_CARD_8H2Q）-->
+        <div class="hero-slide">
           <div class="dc-card">
             <div class="dc-info">
               <div class="dc-brandrow">
@@ -1436,18 +1448,6 @@ tr.hidden{display:none}
               <img src="assets/ellie-portrait.png" alt="董事顧問 邱碩鈺 Ellie Chiu">
               <div class="dc-photo-name">邱碩鈺 Ellie Chiu<span>BNI 華都更分會 董事顧問</span></div>
             </div>
-          </div>
-        </div>
-
-        <!-- 第 2 張：YouTube 影片（乾淨 embed，無 enablejsapi，避免錯誤153） -->
-        <div class="hero-slide">
-          <div class="hero-slide-video">
-            <iframe
-              src="https://www.youtube.com/embed/h_OW0u4A59k?rel=0"
-              title="BNI 華都更分會 — 愛濃那愛，真心動起來"
-              frameborder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              allowfullscreen></iframe>
           </div>
         </div>
 
@@ -2168,8 +2168,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // ─────────────────────────────────────────────
 // Hero Carousel（CAROUSEL_XQ47W9LB）
-// 三張輪播：董顧 / 影片 / 九長
-// 影片 slide（index 1）停留 8 秒，其餘 4.5 秒
+// 三張輪播：影片 / 董顧 / 九長
+// 影片 slide（index 0）停留 8 秒，其餘 4.5 秒
 // ─────────────────────────────────────────────
 (function(){
   var slides = document.querySelectorAll('#heroCarousel .hero-slide');
@@ -2193,8 +2193,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
   function resetTimer(){
     clearInterval(timer);
-    // 影片 slide（index 1）停留 8 秒，讓使用者有時間點播
-    var delay = (cur === 1) ? 8000 : 4500;
+    // 影片 slide（index 0）停留 8 秒，讓使用者有時間點播
+    var delay = (cur === 0) ? 8000 : 4500;
     timer = setInterval(function(){ go(cur + 1); }, delay);
   }
 
