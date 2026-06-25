@@ -666,6 +666,117 @@ tr.hidden{display:none}
   body{padding-left:0!important}
 }
 
+/* ── 培訓快訊 (TRAINING_FEED_7XK2) ── */
+.tf-intro{
+  max-width:720px;
+  font-size:14px;
+  color:var(--gray-600);
+  line-height:1.8;
+  margin-bottom:24px;
+}
+.tf-alllink{
+  display:inline-block;
+  margin-left:6px;
+  color:var(--red);
+  font-weight:600;
+  white-space:nowrap;
+}
+.tf-alllink:hover{text-decoration:underline}
+.tf-list{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  max-width:720px;
+}
+.tf-loading{
+  font-size:14px;
+  color:var(--gray-400);
+  padding:18px 0;
+}
+.tf-card{
+  display:flex;
+  align-items:center;
+  gap:16px;
+  background:var(--white);
+  border:1px solid var(--gray-100);
+  border-radius:var(--r-md);
+  padding:14px 18px;
+  text-decoration:none;
+  transition:border-color .18s ease, box-shadow .18s ease, transform .18s ease;
+}
+.tf-card:hover{
+  border-color:rgba(207,32,48,.35);
+  box-shadow:0 4px 16px rgba(0,0,0,.06);
+  transform:translateX(2px);
+}
+/* 左側日期方塊 */
+.tf-date{
+  flex-shrink:0;
+  width:54px;
+  text-align:center;
+  border-right:1px solid var(--gray-100);
+  padding-right:14px;
+}
+.tf-date .m{
+  font-size:11px;
+  font-weight:600;
+  letter-spacing:.04em;
+  color:var(--red);
+}
+.tf-date .d{
+  font-size:22px;
+  font-weight:800;
+  color:var(--gray-900);
+  line-height:1.05;
+}
+.tf-date .y{
+  font-size:10px;
+  color:var(--gray-400);
+}
+/* 中間標題 */
+.tf-body{flex:1;min-width:0}
+.tf-title{
+  font-size:15px;
+  font-weight:700;
+  color:var(--gray-900);
+  line-height:1.4;
+  margin-bottom:3px;
+}
+.tf-tag{
+  display:inline-block;
+  font-size:11px;
+  font-weight:600;
+  color:var(--red);
+  background:rgba(207,32,48,.07);
+  padding:2px 9px;
+  border-radius:100px;
+}
+/* 右側箭頭 */
+.tf-go{
+  flex-shrink:0;
+  color:var(--gray-300);
+  transition:color .18s ease, transform .18s ease;
+}
+.tf-card:hover .tf-go{color:var(--red);transform:translateX(3px)}
+.tf-note{
+  display:flex;
+  align-items:flex-start;
+  gap:8px;
+  margin-top:20px;
+  max-width:720px;
+  font-size:13px;
+  color:var(--gray-500);
+  line-height:1.7;
+}
+.tf-note svg{flex-shrink:0;margin-top:2px;color:var(--gray-400)}
+.tf-note a{color:var(--red);font-weight:600}
+.tf-note a:hover{text-decoration:underline}
+@media(max-width:600px){
+  .tf-date{width:46px;padding-right:10px}
+  .tf-date .d{font-size:19px}
+  .tf-title{font-size:14px}
+}
+
 /* ── RECRUIT BANNER (RECRUIT_4K9MZ2WX) ── */
 .recruit-banner{
   background:var(--red);
@@ -831,7 +942,7 @@ tr.hidden{display:none}
       <ul class="nav-list">
         <li><a href="#calendar">行事曆</a></li>
         <li><a href="#activities">活動</a></li>
-        <li><a href="#msp">MSP 課程</a></li>
+        <li><a href="#msp">培訓快訊</a></li>
         <li><a href="#powerteam">組聚</a></li>
         <li><a href="#zoom">Zoom 例會</a></li>
         <li><a href="#roster">名冊</a></li>
@@ -847,7 +958,7 @@ tr.hidden{display:none}
   <ul>
     <li><a href="#calendar" onclick="closeMNav()">分會行事曆</a></li>
     <li><a href="#activities" onclick="closeMNav()">活動詳情</a></li>
-    <li><a href="#msp" onclick="closeMNav()">MSP 課程</a></li>
+    <li><a href="#msp" onclick="closeMNav()">培訓快訊</a></li>
     <li><a href="#powerteam" onclick="closeMNav()">Power Team 組聚</a></li>
     <li><a href="#zoom" onclick="closeMNav()">Zoom 例會</a></li>
     <li><a href="#roster" onclick="closeMNav()">夥伴名冊</a></li>
@@ -1188,49 +1299,30 @@ tr.hidden{display:none}
 
 
 <!-- ── MSP 課程（靜態說明卡，2026-06-25 更新）── -->
+<!-- ── 培訓快訊（TRAINING_FEED_7XK2）：自動同步 BNI 官方培訓頁 ──
+     資料源：https://bntw.niiice-design.com/news-category/training/
+     更新方式：Mac Mini 每日爬蟲 → 寫入 Google Sheet「培訓快訊」分頁 → 前端 fetch GAS API
+     接 GAS 前：先用真資料寫死預覽（trainingFallback），給值後改 fetch。 -->
 <section class="msp" id="msp">
   <div class="container">
     <div class="sec-head">
       <span class="red-bar"></span>
-      <h2>MSP 課程</h2>
-      <p>Member Success Program — 夥伴成功培訓</p>
+      <h2>培訓快訊</h2>
+      <p>MSP / PSW / 引薦工作坊等地區培訓 — 自動同步官方排程</p>
     </div>
-    <div id="mspTimeline" style="max-width:640px">
-      <div style="background:var(--gray-50);border:1px solid var(--gray-100);border-radius:var(--r-lg);padding:32px 28px">
-        <div style="display:flex;align-items:flex-start;gap:18px">
-          <div style="flex-shrink:0;width:48px;height:48px;border-radius:50%;background:rgba(207,32,48,.08);border:2px solid rgba(207,32,48,.2);display:flex;align-items:center;justify-content:center">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-          </div>
-          <div>
-            <div style="font-size:16px;font-weight:700;color:var(--gray-900);margin-bottom:8px">MSP（Member Success Program）會員成功培訓</div>
-            <div style="font-size:14px;color:var(--gray-600);line-height:1.8">
-              MSP 是 BNI 的核心基礎培訓，被稱為「BNI 使用說明書」，協助新會員快速掌握 BNI 運作規則、一對一引薦技巧與五大系統。<strong style="color:var(--gray-800)">建議新會員入會後 6 週內完成。</strong>
-            </div>
-            <div style="margin-top:12px;font-size:14px;color:var(--gray-600);line-height:1.8">
-              MSP 由 <strong style="color:var(--gray-800)">BNI 地區辦公室統一排課</strong>、跨分會共同上課，非本分會自辦。可透過下列兩種方式完成：
-            </div>
-            <div style="margin-top:14px;display:flex;flex-direction:column;gap:10px">
-              <a href="https://www.mybni.com?openExternalBrowser=1" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;background:var(--red);color:#fff;font-size:14px;font-weight:600;padding:11px 20px;border-radius:var(--r-md);width:fit-content;transition:background .15s">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
-                線上自學版 — 前往 BNI Academy 上課
-              </a>
-              <div style="font-size:13px;color:var(--gray-400);line-height:1.7">
-                登入 <strong>www.mybni.com</strong>（使用 BNI Connect 帳密），進入 BNI Academy 找到 Member Success Program 即可開始；完成後系統自動同步至 BNI Connect 培訓記錄。
-              </div>
-            </div>
-            <div style="margin-top:14px;display:inline-flex;align-items:flex-start;gap:8px;background:rgba(30,111,191,.07);border:1px solid rgba(30,111,191,.15);border-radius:var(--r-md);padding:10px 14px;font-size:13px;color:#1E6FBF;line-height:1.6">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;margin-top:2px"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
-              <span><strong>實體講師班</strong>由地區辦公室排課，時間請留意分會 LINE 群或例會公告。</span>
-            </div>
-          </div>
-        </div>
-      </div>
+
+    <div class="tf-intro">
+      MSP、簡報技巧（PSW）、引薦工作坊、LTnA 等培訓由 <strong>BNI 地區辦公室統一排課</strong>、跨分會共同上課。下方為近期場次，點任一場可前往官方頁面看詳情與報名。
+      <a href="https://bntw.niiice-design.com/news-category/training/?openExternalBrowser=1" target="_blank" rel="noopener" class="tf-alllink">看全部培訓 →</a>
     </div>
-    <div class="admin-edit">
-      <a href="#">
-        <svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-        編輯 MSP 課程（教育組）
-      </a>
+
+    <div id="trainingList" class="tf-list">
+      <div class="tf-loading">培訓資訊載入中…</div>
+    </div>
+
+    <div class="tf-note">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+      <span>另可登入 <a href="https://www.mybni.com?openExternalBrowser=1" target="_blank" rel="noopener">www.mybni.com</a>（BNI Connect 帳密）進 BNI Academy 自學線上版 MSP，完成後自動同步培訓記錄。</span>
     </div>
   </div>
 </section>
@@ -1409,7 +1501,7 @@ tr.hidden{display:none}
         <ul class="f-links">
           <li><a href="#calendar">分會行事曆</a></li>
           <li><a href="#activities">活動詳情</a></li>
-          <li><a href="#msp">MSP 課程</a></li>
+          <li><a href="#msp">培訓快訊</a></li>
           <li><a href="#powerteam">Power Team</a></li>
           <li><a href="#zoom">Zoom 例會</a></li>
           <li><a href="#roster">夥伴名冊</a></li>
@@ -1678,6 +1770,68 @@ if(document.readyState === 'loading'){
 }
 
 // ─────────────────────────────────────────────
+// 培訓快訊 (TRAINING_FEED_7XK2)
+// 資料源 BNI 官方培訓頁，由 Mac Mini 每日爬蟲寫進 Google Sheet「培訓快訊」。
+// 接 GAS 後：把 TRAINING_API 填上 GAS web app URL，會自動改 fetch；
+// 失敗或未填則用 trainingFallback（2026-06-25 抓的真資料）。
+// ─────────────────────────────────────────────
+var TRAINING_API = ''; // ←給值範例：'https://script.google.com/macros/s/XXX/exec?sheet=培訓快訊'
+var trainingFallback = [
+  {title:'新北市西B區成功會員培訓初階MSP', link:'https://bntw.niiice-design.com/news/msp-4/', date:'2026-06-29'},
+  {title:'跨分會組聚培訓', link:'https://bntw.niiice-design.com/news/group-training-14/', date:'2026-07-06'},
+  {title:'簡報技巧工作坊PSW培訓', link:'https://bntw.niiice-design.com/news/psw-2/', date:'2026-07-08'},
+  {title:'引薦工作坊', link:'https://bntw.niiice-design.com/news/recommend-3/', date:'2026-07-13'},
+  {title:'LTnA培訓', link:'https://bntw.niiice-design.com/news/ltna-4-2/', date:'2026-07-14'},
+  {title:'跨分會組聚培訓', link:'https://bntw.niiice-design.com/news/group-training-15/', date:'2026-07-20'}
+];
+function tfTag(title){
+  if(/MSP/i.test(title)) return 'MSP';
+  if(/PSW|簡報/.test(title)) return 'PSW';
+  if(/LTnA|領導/.test(title)) return 'LTnA';
+  if(/引薦/.test(title)) return '引薦';
+  if(/組聚/.test(title)) return '組聚';
+  if(/一對一|121/.test(title)) return '一對一';
+  if(/PT|工作坊/.test(title)) return '工作坊';
+  return '培訓';
+}
+function tfRender(list){
+  var box = document.getElementById('trainingList');
+  if(!box) return;
+  // 過濾掉已過期（早於今天）的場次，依日期排序，取最近 6 筆
+  var today = new Date(); today.setHours(0,0,0,0);
+  var rows = (list||[]).filter(function(x){
+    if(!x.date) return true;
+    var d = new Date(x.date); return isNaN(d) ? true : d >= today;
+  }).sort(function(a,b){ return (a.date||'').localeCompare(b.date||''); }).slice(0,6);
+  if(!rows.length){
+    box.innerHTML = '<div class="tf-loading">近期暫無培訓場次，請見<a href="https://bntw.niiice-design.com/news-category/training/?openExternalBrowser=1" target="_blank" rel="noopener" style="color:var(--red)">官方培訓頁</a>。</div>';
+    return;
+  }
+  var mNames = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
+  box.innerHTML = rows.map(function(x){
+    var dt = x.date ? new Date(x.date) : null;
+    var dateBlock = (dt && !isNaN(dt))
+      ? '<div class="tf-date"><div class="m">'+mNames[dt.getMonth()]+'</div><div class="d">'+dt.getDate()+'</div><div class="y">'+dt.getFullYear()+'</div></div>'
+      : '<div class="tf-date"><div class="m">近期</div><div class="d">·</div></div>';
+    return '<a class="tf-card" href="'+(x.link||'#')+(x.link?'?openExternalBrowser=1':'')+'" target="_blank" rel="noopener">'
+      + dateBlock
+      + '<div class="tf-body"><div class="tf-title">'+x.title+'</div><span class="tf-tag">'+tfTag(x.title)+'</span></div>'
+      + '<svg class="tf-go" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>'
+      + '</a>';
+  }).join('');
+}
+(function loadTraining(){
+  if(TRAINING_API){
+    fetch(TRAINING_API + (TRAINING_API.indexOf('?')>-1?'&':'?') + 't=' + Date.now())
+      .then(function(r){ return r.json(); })
+      .then(function(data){ tfRender(Array.isArray(data)?data:(data.rows||data.data||[])); })
+      .catch(function(){ tfRender(trainingFallback); });
+  }else{
+    tfRender(trainingFallback);
+  }
+})();
+
+// ─────────────────────────────────────────────
 // RECRUIT MODAL (RECRUIT_4K9MZ2WX)
 // 未來接真實報名頁時：移除 openRecruitModal/closeRecruitModal 兩函式
 // 並把 HTML 裡的 <button onclick="openRecruitModal()"> 換成 <a href="...">
@@ -1735,7 +1889,7 @@ window.addEventListener('scroll',function(){
       <span class="sn-dot"></span><span class="sn-label">活動詳情</span>
     </a>
     <a class="side-nav-item" data-target="msp" href="#msp">
-      <span class="sn-dot"></span><span class="sn-label">MSP 課程</span>
+      <span class="sn-dot"></span><span class="sn-label">培訓快訊</span>
     </a>
     <a class="side-nav-item" data-target="powerteam" href="#powerteam">
       <span class="sn-dot"></span><span class="sn-label">Power Team</span>
