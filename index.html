@@ -580,7 +580,22 @@ tr.hidden{display:none}
   .cal-date-col{flex-direction:row;align-items:baseline;gap:6px}
   .cal-date-m{font-size:15px}
   .zoom-btn{width:100%;justify-content:center}
+
+  /* FIX-1: footer 版權列，word-break:keep-all 讓中文詞不在中間斷行 */
+  .f-copy{word-break:keep-all;overflow-wrap:break-word}
+
+  /* FIX-2/3/4: 已移至後置斷點，確保覆蓋 tf-tabs/zoom-btn 的桌機版定義 */
+
+  /* FIX-5: 培訓副標（tf-intro）縮字級，減少孤行 */
+  .tf-intro{font-size:13px}
+
+  /* FIX-7: About 生態圖放大以提升圖內文字可讀性 */
+  .about-photo-wrap{margin-top:8px}
+  .about-photo-wrap img{width:100%;min-height:200px;object-fit:contain}
 }
+
+/* FIX-6: sticky nav 遮住 section 頂部，全站 section 加 scroll-margin-top */
+section[id]{scroll-margin-top:68px}
 
 /* ── CAROUSEL（CAROUSEL_XQ47W9LB）── */
 /* photo-wrap 已有 position:relative; overflow:hidden */
@@ -1415,6 +1430,27 @@ tr.hidden{display:none}
   transition:background .15s;
 }
 .recruit-modal-ok:hover{background:var(--red-dark)}
+
+/* ── 手機修正補丁（後置，確保覆蓋前面所有桌機版定義）── */
+@media(max-width:480px){
+  /* FIX-2b: zoom-sec 裝飾圓縮到不超右邊界 */
+  .zoom-sec::before{right:0;width:140px;height:140px;top:-30px}
+  .zoom-sec::after{left:0;width:120px;height:120px;bottom:-40px}
+
+  /* FIX-2c: zoom-btn 禁 nowrap，全寬顯示，不讓文字撐出容器 */
+  .zoom-btn{white-space:normal;width:100%;justify-content:center;padding:14px 20px;font-size:14px;box-sizing:border-box}
+
+  /* FIX-2d: deadline-badge 允許換行，不讓長文字撐出 */
+  .deadline-badge{white-space:normal;word-break:keep-all}
+
+  /* FIX-3: 第一層 tab 橫向捲動（後置才能覆蓋 .tf-tabs flex-wrap:wrap） */
+  .tf-tabs{flex-wrap:nowrap!important;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:4px}
+  .tf-tab{flex-shrink:0;font-size:12.5px;padding:7px 13px}
+
+  /* FIX-4: 第二層 tab 橫向捲動（後置才能覆蓋 .tf-type-tabs flex-wrap:wrap） */
+  .tf-type-tabs{flex-wrap:nowrap!important;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:4px}
+  .tf-type-tab{flex-shrink:0}
+}
 </style>
 </head>
 <body>
